@@ -1,1 +1,1 @@
-Extracted from Django Core book
+Extracted from Mastering Django book
