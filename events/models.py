@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Venue(models.Model):
     name = models.CharField('Venue Name', max_length=120)
@@ -23,7 +24,7 @@ class Event(models.Model):
     name = models.CharField('Event Name', max_length=120)
     event_date = models.DateTimeField('Event Date')
     venue = models.ForeignKey(Venue, blank=True, null=True, on_delete=models.CASCADE)
-    manager = models.CharField(max_length=60)
+    manager = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     attendees = models.ManyToManyField(MyClubUser, blank=True)
     description = models.TextField(blank=True)
 
