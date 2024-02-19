@@ -1,9 +1,10 @@
-from .models import Event
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from datetime import date
 import calendar
 from calendar import HTMLCalendar
+from .models import Event
+from .forms import VenueForm
 
 def index(request, year=date.today().year, month=date.today().month):
     # t = date.today()
@@ -34,3 +35,23 @@ def index(request, year=date.today().year, month=date.today().month):
 def all_events(request):
     event_list = Event.objects.all()
     return render(request, 'events/event_list.html', {'event_list': event_list})
+
+def add_venue(request):
+    submitted = False
+    if request.method == 'POST':
+        form = VenueForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('?submitted=True')
+    else:
+        form = VenueForm()
+        if 'submitted' in request.GET:
+            submitted = True
+
+    context = {
+        'form': form,
+        'submitted': submitted,
+    }
+
+    return render(request, 'events/add_venue.html', context)
+    # return HttpResponse("<h1>Add Venue Page</h1>")
